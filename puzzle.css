@@ -1,0 +1,222 @@
+/* CSS */
+@import url('https://fonts.googleapis.com/css2?family=Dosis&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-transition: all 1s ease-in-out;
+  				transition: all 1s ease-in-out;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+  color: #3C4146;
+  height: 100vh;
+  min-width: 320px;
+}
+
+.page {
+  /* Gradient page/body background */
+  background-color: chocolate;
+  background: -webkit-linear-gradient(bottom, #FFFFFF 87%, teal 100%);
+  background: linear-gradient(to top, #FFFFFF 87%, teal 100%);
+  background-repeat: no-repeat;
+
+  padding: 1rem 8px 0 8px;
+  /*overflow: hidden;*/
+}
+
+.fas {
+	font-size:2.5rem;
+	color:crimson;
+}
+
+h1, h2, h3, hr {
+	font-family: 'Dosis', sans-serif;
+	font-weight: normal;
+  margin: 1rem 0 .7rem 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+h1 span {
+	display: inline-block;
+}
+
+.no-show {
+	display: none;
+	/*position: absolute;
+	left: 0px;
+	top: 0px;
+	visibility: hidden;*/
+}
+
+img.raw {
+	margin: 1rem 0;
+}
+
+.puzzle-wrap {
+	display: flex;
+	flex-flow: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	/*overflow: visible;*/
+}
+
+.puzzle,
+.puzzle-bits {
+	display: flex;
+	flex-flow: column;
+
+	margin-bottom: 1rem;
+}
+
+.flex-row {
+	display: flex;
+	margin-bottom: -1px;
+}
+
+li {
+	border: 1px dotted silver;
+	list-style: none;
+	height: 100%;
+	margin-left: -1px;
+}
+
+.progDiv {
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0;
+	padding: 1rem 0;
+	overflow: hidden;	
+}
+
+.progDiv * {
+	margin-right: 1rem;
+}
+
+progress {
+	min-height: 18px;
+	width: 150px;
+	padding: .1rem;
+}
+
+/* Modal styles */
+.modal {
+	opacity: 0;
+  padding: .75rem;
+  min-width: 300px;
+  min-height: 300px;
+  background: #444;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+
+  -webkit-animation: 2s ease-in 0s 1 forwards modAnim;
+					animation: 2s ease-in 0s 1 forwards modAnim;
+}
+
+@keyframes modAnim {
+	0% { transform: scale(0) rotate(90deg) translateX(-50%);}
+	100% { transform: scale(1) rotate(0deg) translateX(-50%); opacity: 1;}
+}
+
+@-webkit-keyframes modAnim {
+	0% { transform: scale(0) rotate(90deg) translateX(-50%); }
+	100% { transform: scale(1) rotate(0deg) translateX(-50%); opacity: 1; }
+}
+
+.modMsg {
+  color: #FDE1E3;
+  text-align: center;
+  margin: 0 0 .1rem 0;
+}
+
+.modHeader {
+  text-align: right;
+}
+
+.modHeader button {
+  border: 0px;
+  background: none;
+  cursor: pointer;
+}
+
+.modHeader button:hover {
+	-webkit-transform: rotate(90deg);
+					transform: rotate(90deg);
+}
+
+.modal img {
+	display: block;
+	margin: 0 auto;
+	max-height: 50vw;
+}
+
+.spanGroup {
+	display: inline-block;
+}
+
+select {
+	padding: .1rem;
+	border: 1px solid #b8dbdb;
+}
+
+/*select option:hover {
+	border: none;
+	padding: 1rem 0;
+}
+*/
+
+/* icon animations */
+.progDiv i {
+	position: relative;
+	margin: 0;
+	-webkit-animation: 12s ease-in-out 1s infinite iconAnim;
+					animation: 12s ease-in-out 1s infinite iconAnim;
+}
+
+@keyframes iconAnim {
+	0% { left: 0%; transform: scale(1) rotate(0deg); }
+	25% { transform: scale(1.75) rotate(0deg); }
+	50% { left: 90%; transform: scale(1) rotate(180deg); }
+	75% { transform: scale(1.75) rotate(180deg); }
+	100% { left: 0%; transform: scale(1) rotate(0deg); }
+}
+
+@-webkit-keyframes iconAnim {
+	0% { left: 0%; transform: scale(1) rotate(0deg); }
+	25% { transform: scale(1.75) rotate(0deg); }
+	50% { left: 90%; transform: scale(1) rotate(180deg); }
+	75% { transform: scale(1.75) rotate(180deg); }
+	100% { left: 0%; transform: scale(1) rotate(360deg); }
+}
+
+
+/* Animation help */
+/*<single-animation>#
+where 
+<single-animation> = <time> || <timing-function> || <time> || 
+<single-animation-iteration-count> || <single-animation-direction> || 
+<single-animation-fill-mode> || <single-animation-play-state> || [ none | <keyframes-name> ]
+
+where 
+<timing-function> = linear | <cubic-bezier-timing-function> | <step-timing-function>
+<single-animation-iteration-count> = infinite | <number>
+<single-animation-direction> = normal | reverse | alternate | alternate-reverse
+<single-animation-fill-mode> = none | forwards | backwards | both
+<single-animation-play-state> = running | paused
+<keyframes-name> = <custom-ident> | <string>
+
+where 
+<cubic-bezier-timing-function> = ease | ease-in | ease-out | ease-in-out | cubic-bezier(<number>, <number>, <number>, <number>)
+<step-timing-function> = step-start | step-end | steps(<integer>[, <step-position>]?)
+
+where 
+<step-position> = jump-start | jump-end | jump-none | jump-both | start | end
+*/
