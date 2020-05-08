@@ -19,6 +19,10 @@ var level;
 // INITIATE app after page load
 // ========
 window.onload = function init() {
+	// check if touch screen
+	if (isTouchScreen()) {
+		console.log('Device is touch screen');
+	};
 	// 1st calculate dimensions and number of tiles
 	getDims();
 
@@ -27,6 +31,15 @@ window.onload = function init() {
 	shuffle(tiles);
 	matrix(puzzle);
 	matrix(puzzleBits);
+}
+
+
+// check if device is touch screen
+function isTouchScreen() {
+	if (window.matchMedia("(pointer:coarse)").matches) {
+		// initTouch();
+		return true;
+	} else { return false; }
 }
 
 
@@ -86,6 +99,10 @@ function matrix(elem) {
 				cols[j].setAttribute('ondrop', 'dropHere(this, event)');
 				cols[j].setAttribute("ondragleave", "dragLeave(this, event)");
 				cols[j].setAttribute("ondragenter", "dragEnter(this, event)");
+				// if (isTouchScreen) {
+				// 	cols[j].setAttribute('ondragover', 'touchDragOver(this, event)');
+				// 	cols[j].setAttribute('ondrop', 'touchDropHere(this, event)');
+				// }
 			};
 			if (elem == puzzleBits) {
 				cols[j].setAttribute("ondragleave", "dragLeave(this, event)");
@@ -124,6 +141,12 @@ function spriteImg(image) {
 			tmpTile.id = "cell"+i+j;
 			tmpTile.setAttribute('ondragstart', 'dragStart(this, event)');
 			tmpTile.setAttribute('ondragend', 'dragEnd(this, event)');
+			tmpTile.setAttribute('draggable', 'true');
+			// if (isTouchScreen()) {
+			// 	tmpTile.setAttribute('ontouchstart', 'touchDragStart(this, event)');
+			// 	tmpTile.setAttribute('ontouchend', 'dragEnd(this, event)');
+			// 	tmpTile.setAttribute('ondrag', 'touchDragOver(this, event)');
+			// };
 			tiles.push(tmpTile);
 		}
 	}
@@ -148,13 +171,24 @@ function shuffle(array) {
 function dragStart(target, event) {
   // Change css for visual feedback
   target.style.opacity = '0.5';
-  // Copy the target to the drag'n'drop clipboard
+  // e.dataTransfer.effectAllowed = 'copyLink';
   event.dataTransfer.setDragImage(target, spriteSize/2, spriteSize/2);
-  event.dataTransfer.setData("text", target.id);
+  // Copy the target to the drag'n'drop clipboard
+  event.dataTransfer.setData("Text", target.id);
 
   // allow dropping on parent after dragging item out
   target.parentNode.setAttribute("ondrop", "dropHere(this, event)");
   target.parentNode.setAttribute("ondragover", "dragOver(this, event)");
+}
+
+function touchDragStart(target, event) {
+  // Change css for visual feedback
+  target.style.opacity = '0.5';
+  event.preventDefault();
+
+  // allow dropping on parent after dragging item out
+  target.parentNode.setAttribute("ondrop", "touchDropHere(this, event)");
+  target.parentNode.setAttribute("ondragover", "touchDragOver(this, event)");
 }
 
 function dragEnd(target, event) {
@@ -162,6 +196,9 @@ function dragEnd(target, event) {
 }
 
 function dragEnter(target, event) {
+	event.preventDefault();	
+	event.stopPropagation(); // stop it here to prevent it bubble up
+
 	target.style.backgroundColor = "whitesmoke";
 	if (target.childElementCount > 0) {
 		target.setAttribute("ondrop", "");
@@ -170,13 +207,28 @@ function dragEnter(target, event) {
 }
 
 function dragLeave(target, event) {
+	event.stopPropagation(); // stop it here to prevent it bubble up
 	target.style.backgroundColor = "";
 }
 
 function dragOver(target, event) {
+	event.preventDefault(); // allows us to drop
+  event.stopPropagation(); // stop it here to prevent it bubble up
+ 	event.dataTransfer.dropEffect = "copy";
+}
+
+function touchDragOver(target, event) {
 	event.stopPropagation();
 	event.preventDefault();
- 	event.dataTransfer.dropEffect = "copy";
+	// show drag image
+ 	// event.dataTransfer.setDragImage(target, spriteSize/2, spriteSize/2);
+ 	var touchLocation = event.targetTouches[0];
+  // locate dragged object wrt mouse/touch
+  target.style.position = 'absolute';
+  target.style.left = touchLocation.pageX+"px";
+  target.style.top = touchLocation.pageY+"px";
+ 	// event.dataTransfer.dropEffect = "copy";
+
 }
 
 function dropHere(target, event) {
@@ -184,11 +236,40 @@ function dropHere(target, event) {
  	event.preventDefault();
 
  	// Get the data, which is the id of the drop target
- 	var idTile = event.dataTransfer.getData("text");
+ 	var idTile = event.dataTransfer.getData("Text");
 
  	// add drop properties at empty parent & add border
  	document.getElementById(idTile).parentNode.setAttribute("ondrop", "dropHere(this, event)");
  	document.getElementById(idTile).parentNode.setAttribute("ondragover", "dragOver(this, event)");
+ 	document.getElementById(idTile).parentNode.style.border = '1px dotted silver';
+ 	// append tile AFTER prop changes above
+ 	target.appendChild(document.getElementById(idTile));
+
+ 	// remove drop properties once target filled in & set new CSS on cell li elem
+ 	target.style.backgroundColor = "";
+ 	target.style.border = '0px';
+ 	target.setAttribute("ondrop", "");
+ 	target.setAttribute("ondragover", "");
+ 	target.setAttribute("ondragenter", "dragEnter(this, event)");
+
+ 	// check on puzzle status
+ 	var tmpTiles = document.querySelectorAll(".puzzle img");
+ 	checkStatus(tmpTiles);
+}
+
+function touchDropHere(target, event) {
+ 	event.stopPropagation();
+ 	event.preventDefault();
+ 	event.dataTransfer.dropEffect = "copy";
+  // Copy the target to the drag'n'drop clipboard
+  event.dataTransfer.setData("Text", target.id);
+
+ 	// Get the data, which is the id of the drop target
+ 	var idTile = event.dataTransfer.getData("Text");
+
+ 	// add drop properties at empty parent & add border
+ 	document.getElementById(idTile).parentNode.setAttribute("ondrop", "touchDropHere(this, event)");
+ 	document.getElementById(idTile).parentNode.setAttribute("ondragover", "touchDragOver(this, event)");
  	document.getElementById(idTile).parentNode.style.border = '1px dotted silver';
  	// append tile AFTER prop changes above
  	target.appendChild(document.getElementById(idTile));
