@@ -59,6 +59,13 @@ img {
 					transition: unset;
 }
 
+img:active {
+	cursor: grabbing !important;
+	-webkit-transform: scale(0.95) !important;
+					transform: scale(0.95) !important;
+	border: 1px dashed crimson !important;
+}
+
 img.raw {
 	margin: 1rem 0;
 }
