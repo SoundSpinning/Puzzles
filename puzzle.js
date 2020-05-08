@@ -20,6 +20,7 @@ var level;
 // ========
 window.onload = function init() {
 	// check if touch screen
+	// when true the JS polyfill at bottom of .HTML will make it work
 	if (isTouchScreen()) {
 		console.log('Device is touch screen');
 	};
@@ -37,7 +38,6 @@ window.onload = function init() {
 // check if device is touch screen
 function isTouchScreen() {
 	if (window.matchMedia("(pointer:coarse)").matches) {
-		// initTouch();
 		return true;
 	} else { return false; }
 }
@@ -99,10 +99,6 @@ function matrix(elem) {
 				cols[j].setAttribute('ondrop', 'dropHere(this, event)');
 				cols[j].setAttribute("ondragleave", "dragLeave(this, event)");
 				cols[j].setAttribute("ondragenter", "dragEnter(this, event)");
-				// if (isTouchScreen) {
-				// 	cols[j].setAttribute('ondragover', 'touchDragOver(this, event)');
-				// 	cols[j].setAttribute('ondrop', 'touchDropHere(this, event)');
-				// }
 			};
 			if (elem == puzzleBits) {
 				cols[j].setAttribute("ondragleave", "dragLeave(this, event)");
@@ -141,12 +137,8 @@ function spriteImg(image) {
 			tmpTile.id = "cell"+i+j;
 			tmpTile.setAttribute('ondragstart', 'dragStart(this, event)');
 			tmpTile.setAttribute('ondragend', 'dragEnd(this, event)');
+			// this is required to make touch polyfill to work
 			tmpTile.setAttribute('draggable', 'true');
-			// if (isTouchScreen()) {
-			// 	tmpTile.setAttribute('ontouchstart', 'touchDragStart(this, event)');
-			// 	tmpTile.setAttribute('ontouchend', 'dragEnd(this, event)');
-			// 	tmpTile.setAttribute('ondrag', 'touchDragOver(this, event)');
-			// };
 			tiles.push(tmpTile);
 		}
 	}
@@ -171,7 +163,6 @@ function shuffle(array) {
 function dragStart(target, event) {
   // Change css for visual feedback
   target.style.opacity = '0.5';
-  // e.dataTransfer.effectAllowed = 'copyLink';
   event.dataTransfer.setDragImage(target, spriteSize/2, spriteSize/2);
   // Copy the target to the drag'n'drop clipboard
   event.dataTransfer.setData("Text", target.id);
@@ -179,16 +170,6 @@ function dragStart(target, event) {
   // allow dropping on parent after dragging item out
   target.parentNode.setAttribute("ondrop", "dropHere(this, event)");
   target.parentNode.setAttribute("ondragover", "dragOver(this, event)");
-}
-
-function touchDragStart(target, event) {
-  // Change css for visual feedback
-  target.style.opacity = '0.5';
-  event.preventDefault();
-
-  // allow dropping on parent after dragging item out
-  target.parentNode.setAttribute("ondrop", "touchDropHere(this, event)");
-  target.parentNode.setAttribute("ondragover", "touchDragOver(this, event)");
 }
 
 function dragEnd(target, event) {
@@ -200,6 +181,7 @@ function dragEnter(target, event) {
 	event.stopPropagation(); // stop it here to prevent it bubble up
 
 	target.style.backgroundColor = "whitesmoke";
+	// prevent dropping on a tile with children
 	if (target.childElementCount > 0) {
 		target.setAttribute("ondrop", "");
  		target.setAttribute("ondragover", "");
@@ -217,20 +199,6 @@ function dragOver(target, event) {
  	event.dataTransfer.dropEffect = "copy";
 }
 
-function touchDragOver(target, event) {
-	event.stopPropagation();
-	event.preventDefault();
-	// show drag image
- 	// event.dataTransfer.setDragImage(target, spriteSize/2, spriteSize/2);
- 	var touchLocation = event.targetTouches[0];
-  // locate dragged object wrt mouse/touch
-  target.style.position = 'absolute';
-  target.style.left = touchLocation.pageX+"px";
-  target.style.top = touchLocation.pageY+"px";
- 	// event.dataTransfer.dropEffect = "copy";
-
-}
-
 function dropHere(target, event) {
  	event.stopPropagation();
  	event.preventDefault();
@@ -245,36 +213,7 @@ function dropHere(target, event) {
  	// append tile AFTER prop changes above
  	target.appendChild(document.getElementById(idTile));
 
- 	// remove drop properties once target filled in & set new CSS on cell li elem
- 	target.style.backgroundColor = "";
- 	target.style.border = '0px';
- 	target.setAttribute("ondrop", "");
- 	target.setAttribute("ondragover", "");
- 	target.setAttribute("ondragenter", "dragEnter(this, event)");
-
- 	// check on puzzle status
- 	var tmpTiles = document.querySelectorAll(".puzzle img");
- 	checkStatus(tmpTiles);
-}
-
-function touchDropHere(target, event) {
- 	event.stopPropagation();
- 	event.preventDefault();
- 	event.dataTransfer.dropEffect = "copy";
-  // Copy the target to the drag'n'drop clipboard
-  event.dataTransfer.setData("Text", target.id);
-
- 	// Get the data, which is the id of the drop target
- 	var idTile = event.dataTransfer.getData("Text");
-
- 	// add drop properties at empty parent & add border
- 	document.getElementById(idTile).parentNode.setAttribute("ondrop", "touchDropHere(this, event)");
- 	document.getElementById(idTile).parentNode.setAttribute("ondragover", "touchDragOver(this, event)");
- 	document.getElementById(idTile).parentNode.style.border = '1px dotted silver';
- 	// append tile AFTER prop changes above
- 	target.appendChild(document.getElementById(idTile));
-
- 	// remove drop properties once target filled in & set new CSS on cell li elem
+ 	// remove drop properties once target filled in & set new CSS on cell <li> elem
  	target.style.backgroundColor = "";
  	target.style.border = '0px';
  	target.setAttribute("ondrop", "");
