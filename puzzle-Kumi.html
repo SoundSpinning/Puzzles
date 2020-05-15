@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <!-- Place favicon.ico in the root directory -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+	<title>Kumi's 10 Albums Request</title>
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="puzzle.css">
+	<!-- ICONS -->
+	<script src="https://kit.fontawesome.com/703ff248f3.js" crossorigin="anonymous"></script>
+</head>
+
+
+<body class="page">
+<!--[if IE]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. IE is <strong>not supported</strong>. Please <a href="https://browsehappy.com/?locale=en">upgrade / change your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+	<h1>Kumi&apos;s&nbsp; Puzzle:&nbsp; <span>Jes&apos; 10 Albums
+		<i class="fas fa-dragon"></i></span></h1>
+
+	<p>Drag and drop to complete the puzzle. &nbsp;
+		<span class="spanGroup">
+    	<label for="level"><strong>Level &nbsp;</strong></label>
+      <select id="level" name="level" autocomplete="on">
+        <option value="4" selected>Easy</option>
+        <option value="6">Medium</option>
+        <option value="8">Hard</option>
+      </select>
+  	</span>
+	</p>
+
+	<div class="progDiv flex-row">
+		<label for="progress">Progress : 0%</label>
+		<progress id="progress" value="0" max="100"></progress>
+		<div style="flex:auto;"><i class="fas fa-spider"></i></div>
+	</div>
+
+	<div class="puzzle-wrap">
+		<div class="puzzle"></div>
+		<div class="puzzle-bits"></div>
+	</div>
+
+	<img class="raw no-show" src="https://soundspinning.github.io/Assets/Jes10Albums.jpg" crossorigin="anonymous" alt="puzzle picture source">
+
+	<div class="modal no-show">
+    <div class="modHeader">
+      <button class="closeBtn" onclick="hideModal()"><i class="fas fa-window-close"></i></button>
+      <h1 class="modMsg">You are a winner !</h1>
+      <p class="modMsg">Try another level?</p>
+    </div>
+    <img class="modImg" src="https://soundspinning.github.io/Assets/Joy.jpg" crossorigin="anonymous" alt="puzzle picture source">
+  </div>
+
+  <p>
+  	<br>
+  	<small><em>&nbsp;Internet Explorer is not supported, install a <a href="https://browsehappy.com/?locale=en" target="_blank">modern browser</a>.</em></small>
+	</p>
+
+	<script type="text/javascript" src="puzzle.js"></script>
+	<!-- Big kudos to Bernardo Castilho for this fantastic polyfill to implement 
+		drag&drop on touch devices: https://github.com/Bernardo-Castilho/dragdroptouch -->
+	<script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
