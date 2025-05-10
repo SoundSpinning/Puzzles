@@ -119,12 +119,12 @@ progress {
 /* Modal styles */
 .modal {
 	opacity: 0;
-  padding: .75rem;
-  min-width: 300px;
-  min-height: 300px;
+  /* padding: .75rem; */
+	width: 100%;
+	height: 100%;
   background: #444;
   position: absolute;
-  top: 25%;
+  top: 0;
   left: 50%;
 
   -webkit-animation: 2s ease-in 0s 1 forwards modAnim;
@@ -149,9 +149,13 @@ progress {
 
 .modHeader {
   text-align: right;
+	padding-bottom: 1rem;
 }
 
 .modHeader button {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
   border: 0px;
   background: none;
   cursor: pointer;
@@ -165,7 +169,8 @@ progress {
 .modal img {
 	display: block;
 	margin: 0 auto;
-	max-height: 50vw;
+	max-width: 100%;
+	max-height: 80vh;
 }
 
 .spanGroup {
